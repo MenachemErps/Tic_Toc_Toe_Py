@@ -1,4 +1,7 @@
 
+import imput_type
+
+
 # global variable list to make the tic toc toe board
 board = [
     ["1", "2", "o"],
@@ -15,17 +18,19 @@ def current_board(board):
     print(f" {board[2][0]} | {board[2][1]} | {board[2][2]} ")
 
 # function to get whatever position the user wants to go in
-def player_input():
+def get_player_input():
     position = input("Enter position (1 - 9) ")
-    if position == "exit":
-        quit()
-    return int(position)
+    position_type_and_value = imput_type.InputTypeChecker(position)
+    if position_type_and_value.get_value == "exit":
+        exit()
+    return position_type_and_value.get_value() if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10) else player_input()
+
 
 # letting player x go and update the board lists to where the player went 
 def player_x_turn():
     
     #receiving position that the user selected 
-    position = player_input()
+    position = get_player_input()
 
     # based off the position update list 
     if position in [1, 2, 3]:
@@ -37,7 +42,7 @@ def player_x_turn():
 
 # same as function player_x_turn
 def player_o_turn():
-    position = player_input()
+    position = get_player_input()
     if position in [1, 2, 3]:
         board[0][position - 1] = "o"
     elif position in [4, 5, 6]:
