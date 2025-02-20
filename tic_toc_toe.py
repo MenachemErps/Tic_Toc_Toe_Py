@@ -1,5 +1,4 @@
-import imput_type
-
+import input_type
 
 # global variable list to make the tic toc toe board
 board = [
@@ -19,13 +18,15 @@ def current_board(board):
 
 # function to get whatever position the user wants to go in
 def get_player_input():
-    position = input("Enter position (1 - 9) ")
-    position_type_and_value = imput_type.InputTypeChecker(position)
-    if position_type_and_value.get_value == "exit":
-        exit()
-    return position_type_and_value.get_value() if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10) else print("Not valid Try Again") and get_player_input()
-
-
+    while True:
+        position = input("Enter position (1 - 9) ")
+        position_type_and_value = input_type.InputTypeChecker(position)
+        if position_type_and_value.get_value() == "exit":
+            exit()
+        if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10):
+            return position_type_and_value.get_value()
+        else:
+            print("Not valid. Try Again")
 
 def update_board(position, player):
     if position in [1, 2, 3]:
@@ -43,14 +44,11 @@ def update_board(position, player):
     else:
         return False
 
-
-
 # transposing board to make the columns rows to be able to check for winner in the columns
 def transpose_board():
     return [[board[j][i] for j in range(len(board))] for i in range(len(board[0]))]
 
-
-#check if there is a winner 
+# check if there is a winner 
 def check_winner():
     # checking each row if all are x or o to determine winner 
     try:
