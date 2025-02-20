@@ -23,7 +23,7 @@ def get_player_input():
     position_type_and_value = imput_type.InputTypeChecker(position)
     if position_type_and_value.get_value == "exit":
         exit()
-    return position_type_and_value.get_value() if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10) else get_player_input()
+    return position_type_and_value.get_value() if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10) else print("Not valid Try Again") and get_player_input()
 
 
 
