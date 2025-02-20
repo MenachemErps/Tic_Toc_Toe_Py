@@ -1,86 +1,56 @@
 import input_type
 
-# global variable list to make the tic toc toe board
-board = [
-    ["1", "2", "3"],
-    ["4", "5", "6"],
-    ["7", "8", "9"]
-]
-i = 0
+# Global variable list to make the tic-tac-toe board
+board_new = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-# function to display board nicely in console 
-def current_board(board):
-    print(f" {board[0][0]} | {board[0][1]} | {board[0][2]} ")
-    print("---|---|---")
-    print(f" {board[1][0]} | {board[1][1]} | {board[1][2]} ")
-    print("---|---|---")
-    print(f" {board[2][0]} | {board[2][1]} | {board[2][2]} ")
+# List of winning combinations (rows, columns, diagonals)
+winning_combinations = [
+        (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Rows
+        (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Columns
+        (0, 4, 8), (2, 4, 6)              # Diagonals
+    ]
 
-# function to get whatever position the user wants to go in
+# Function to display the board nicely in the console
+def current_board_new(board):
+    print(f" {board[0]} | {board[1]} | {board[2]} ")
+    print("---|---|---")
+    print(f" {board[3]} | {board[4]} | {board[5]} ")
+    print("---|---|---")
+    print(f" {board[6]} | {board[7]} | {board[8]} ")
+
+# Function to get the position the user wants to go in
 def get_player_input():
     while True:
         position = input("Enter position (1 - 9) ")
         position_type_and_value = input_type.InputTypeChecker(position)
         if position_type_and_value.get_value() == "exit":
             exit()
-        if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 9):
+        if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10):
             return position_type_and_value.get_value()
         else:
             print("Not valid. Try Again")
 
+# Function to update the board with the player's move
 def update_board(position, player):
-    if position in [1, 2, 3]:
-        row, col = 0, position - 1
-    elif position in [4, 5, 6]:
-        row, col = 1, position - 4
-    elif position in [7, 8, 9]:
-        row, col = 2, position - 7
-    else:
-        return False
-
-    if board[row][col] not in ["x", "o"]:
-        board[row][col] = player
+    if board_new[position - 1] not in ["x", "o"]:
+        board_new[position - 1] = player
         return True
     else:
         return False
 
-# transposing board to make the columns rows to be able to check for winner in the columns
-def transpose_board():
-    return [[board[j][i] for j in range(len(board))] for i in range(len(board[0]))]
-
-# check if there is a winner 
+# Function to check if there is a winner
 def check_winner():
-    # checking each row if all are x or o to determine winner 
-    try:
-        for row in board:
-            for player in ("x", "o"):
-                if all(cells == player for cells in row):
-                    return f"Player {player} wins!!"
+    for a, b, c in winning_combinations:
+        if board_new[a] == board_new[b] == board_new[c]:
+            return True
+    return False
 
-        # checking columns by first transposing board with the transpose_board function and making the code more condensed
-        for rows in transpose_board():
-            for player in ("x", "o"):
-                if all(cells == player for cells in rows):
-                    return f"Player {player} wins!!"
-
-        diagnole = []
-        diagnole2 = []
-        for rows in range(len(board)):
-            diagnole.append(board[rows][rows])
-            diagnole2.append(board[rows][-(rows + 1)])
-
-        for player in ("x", "o"):
-            if all(cell == player for cell in diagnole):
-                return f"Player {player} wins!!"
-            elif all(cell == player for cell in diagnole2):
-                return f"Player {player} wins!!"
-    except Exception as e:
-        print(f"There was a problem checking results {e}")
-    return None
-
-# Modified while loop
-while i in range(9):
-    current_board(board)
+# Main game loop
+i = 0
+x = 9
+winner = False
+while i in range(x):
+    current_board_new(board_new)
     if i % 2 == 0:
         player = "x" 
         print("Player x turn. Please enter a position")
@@ -93,10 +63,12 @@ while i in range(9):
     else:
         print("Position already taken please try again")
         continue
-    winner = check_winner()
-    if winner:
-        print(winner)
+    if check_winner():
+        x = i + 1
+        print(f"Player {player} wins!!!")
         break
+else:
+    print("It's a draw!")
 
 
 
