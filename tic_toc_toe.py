@@ -1,13 +1,13 @@
-
 import imput_type
 
 
 # global variable list to make the tic toc toe board
 board = [
-    ["1", "2", "o"],
-    ["4", "o", "6"],
-    ["o", "8", "9"]
+    ["1", "2", "3"],
+    ["4", "5", "6"],
+    ["7", "8", "9"]
 ]
+i = 0
 
 # function to display board nicely in console 
 def current_board(board):
@@ -26,29 +26,24 @@ def get_player_input():
     return position_type_and_value.get_value() if position_type_and_value.get_type() == "Integer" and position_type_and_value.get_value() in range(1, 10) else player_input()
 
 
-# letting player x go and update the board lists to where the player went 
-def player_x_turn():
-    
-    #receiving position that the user selected 
-    position = get_player_input()
 
-    # based off the position update list 
+def update_board(position, player):
     if position in [1, 2, 3]:
-        board[0][position - 1] = "x"
+        row, col = 0, position - 1
     elif position in [4, 5, 6]:
-        board[1][position - 4] = "x"
+        row, col = 1, position - 4
     elif position in [7, 8, 9]:
-        board[2][position - 7] = "x"
+        row, col = 2, position - 7
+    else:
+        return False
 
-# same as function player_x_turn
-def player_o_turn():
-    position = get_player_input()
-    if position in [1, 2, 3]:
-        board[0][position - 1] = "o"
-    elif position in [4, 5, 6]:
-        board[1][position - 4] = "o"
-    elif position in [7, 8, 9]:
-        board[2][position - 7] = "o"
+    if board[row][col] not in ["x", "o"]:
+        board[row][col] = player
+        return True
+    else:
+        return False
+
+
 
 # transposing board to make the columns rows to be able to check for winner in the columns
 def transpose_board():
@@ -78,21 +73,33 @@ def check_winner():
 
         for player in ("x", "o"):
             if all(cell == player for cell in diagnole):
-                print(f"Player {player} wins!!")
+                return f"Player {player} wins!!"
             elif all(cell == player for cell in diagnole2):
-                print(f"Player {player} wins!!")
+                return f"Player {player} wins!!"
     except Exception as e:
         print(f"There was a problem checking results {e}")
+    return None
+
+# Modified while loop
+while i in range(9):
+    current_board(board)
+    if i % 2 == 0:
+        player = "x" 
+        print("Player x turn. Please enter a position")
+    else:
+        player = "o"
+        print("Player o turn. Please enter a position")
+    position = get_player_input()
+    if update_board(position, player):
+        i += 1
+    else:
+        print("Position already taken please try again")
+        continue
+    winner = check_winner()
+    if winner:
+        print(winner)
+        break
 
 
 
 
-
-
-# current_board(board)
-# check_winner()
-# player_x_turn()
-
-# player_o_turn()
-current_board(board)
-# current_board(board)
